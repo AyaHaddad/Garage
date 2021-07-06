@@ -18,20 +18,20 @@
     <v-text-field
       label="Name"
       filled
-      v-model="name"
+      v-model="registerData.name"
       required
     ></v-text-field>
 
     <v-text-field
       label="E-mail"
       filled
-      v-model="email"
+      v-model="registerData.email"
       :rules="emailRules"
       required
     ></v-text-field>
 
     <v-text-field
-      v-model="password"
+      v-model="registerData.password"
       filled
       :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
       :type="show1 ? 'text' : 'password'"
@@ -45,7 +45,7 @@
       depressed
       color="primary"
       class="mr-4"
-      @click="validate"
+      @click="register()"
     >
       Register now !
     </v-btn>
@@ -56,9 +56,12 @@
 </template>
 
 <script>
+  import axios from 'axios';
+
   export default {
     name: 'Register',
     data: () => ({
+      registerData: {"name":"","email":"","password":""},
       valid: true,
       email: '',
       emailRules: [
@@ -75,6 +78,24 @@
       validate () {
         this.$refs.form.validate()
       },
+
+    register(){
+        var data = {
+          name: this.registerData.name,
+          email: this.registerData.email,
+          password: this.registerData.password,
+        }
+
+        axios.post('http://localhost:3000/api/users', data)
+        .then((res) => {
+          var user = res.data.user;
+          if (user != null) {
+            localStorage.setItem('user', JSON.stringify(user));
+            this.$router.push('/MyCars');
+          }
+        })
+      }
     },
   }
+
 </script>

@@ -1,12 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+
 
 const app = express();
-
 const jsonParser = bodyParser.json()
-
 const { DBconfig } = require('./DBconfig');
 
+app.use(bodyParser.json());
+app.use(cors());
+
+ 
 //Users Routes
 app.post('/api/users', jsonParser, (req, res) => {
     let data = req.body;
